@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class UserActions {
     public boolean ReqisterUser(String userName, String userPassword) {
-        DatabaseHandler dbHandler = new DatabaseHandler();
+        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String query = "Select Count(id) from users where " +
                 "userName = '" + userName + "'";
         if (dbHandler.sendQuery(query, "Select",  new String[]{"count(id)"}).get(0).get("count(id)").equals("0")) {
@@ -16,7 +16,7 @@ public class UserActions {
         return false;
     }
     public boolean LoginUser(String userName, String userPassword){
-        DatabaseHandler dbHandler = new DatabaseHandler();
+        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String[] columns = {"userName", "userPassword"};
         String query = "Select userName, userPassword from users where " +
                 "userName = '" + userName + "'";

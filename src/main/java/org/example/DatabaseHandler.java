@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class DatabaseHandler {
+    final private String login;
+    final private String password;
+    DatabaseHandler(String login, String password){
+        this.login = login;
+        this.password = password;
+    }
     String url = "jdbc:mysql://localhost:3306/Movies";
     Connection connection = null;
     Statement statement = null;
@@ -23,10 +29,9 @@ public class DatabaseHandler {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             // Establish connection
-            connection = DriverManager.getConnection(url, "mortal", "");
+            connection = DriverManager.getConnection(url, login, password);
             System.out.println("Connected to the database!");
 
-            // Create a statement
             statement = connection.createStatement();
             if(type.equals("Update")) {
                 affected_rows = statement.executeUpdate(query_String);
