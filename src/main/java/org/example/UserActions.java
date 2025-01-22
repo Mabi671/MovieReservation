@@ -1,5 +1,6 @@
 package org.example;
 import javax.swing.plaf.synth.SynthTextAreaUI;
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,12 +89,15 @@ public class UserActions {
                     seats.add(entry.getKey());
                 }
             }
-            System.out.println(re.get("movie_title") + re.get("date") + re.get("time") + seats);
+            System.out.println(re.get("movie_title") +" "+ re.get("date") +" "+ re.get("time") +" "+ seats);
         }
 
     }
-    public void cancelReservations(){
-
+    public void cancelReservations(String seat, String movie_title, String date, String time){
+        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
+        String query = "update seats set "+seat+" = 0 where id = (select id from showtimes where movie_title = " +
+                "'"+movie_title+"' and date = '"+date+"' and time = '"+time+"' limit 1);";
+        dbHandler.sendQuery(query, "Update", null);
     }
 
 }

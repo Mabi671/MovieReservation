@@ -16,7 +16,7 @@ public class Main {
         UserActions userA = new UserActions();
         if(userA.LoginUser("Milosnik", "kogostam")){
             System.out.println("User logged in");
-            userA.seeReservations();
+            userA.cancelReservations("B","Szybcy i spokojni","2025-01-03", "15:30:45");
         }
 
 
