@@ -22,23 +22,25 @@ public class DatabaseHandler {
     Statement statement = null;
     ResultSet resultSet = null;
     int affected_rows = -1;
-    List<Map<String, String>> result = new ArrayList<>();
+
     public List<Map<String, String>> sendQuery(String query_String, String type, String[] columns) {
+        List<Map<String, String>> result = null;
         try {
+            result = new ArrayList<>();
             // Load MySQL JDBC Driver
             Class.forName("com.mysql.cj.jdbc.Driver");
-
             // Establish connection
             connection = DriverManager.getConnection(url, login, password);
             System.out.println("Connected to the database!");
 
             statement = connection.createStatement();
-            if(type.equals("Update")) {
+            if (type.equals("Update")) {
                 affected_rows = statement.executeUpdate(query_String);
-            }else{
+            } else {
                 resultSet = statement.executeQuery(query_String);
                 while (resultSet.next()) {
-                    Map<String, String> map = new HashMap<>();;
+                    Map<String, String> map = new HashMap<>();
+                    ;
                     for (String col : columns) {
                         map.put(col, resultSet.getString(col));
                     }
@@ -50,7 +52,10 @@ public class DatabaseHandler {
         } finally {
             // Close resources
             try {
-                if (resultSet != null) resultSet.close();
+                if (resultSet != null) {
+                    System.out.println("closed");
+                    resultSet.close();
+                }
                 if (statement != null) statement.close();
                 if (connection != null) connection.close();
             } catch (Exception e) {

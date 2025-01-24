@@ -1,6 +1,9 @@
 package org.example;
 
+import javax.xml.crypto.Data;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -10,7 +13,7 @@ public class Main {
             System.out.println("User successfully registered");
         }
 
-         */
+
 
 
         UserActions userA = new UserActions();
@@ -18,14 +21,15 @@ public class Main {
             System.out.println("User logged in");
             userA.cancelReservations("B","Szybcy i spokojni","2025-01-03", "15:30:45");
         }
+        
+         */
 
 
-         /*
         AdminActions adminA = new AdminActions();
         String[] movieData = {"Szybcy i spokojni", " Fajny film xd", "kulimidz.png", "romance"};
         adminA.addMovie(movieData);
 
-
+/*
         AdminActions adminA = new AdminActions();
         adminA.deleteMovie("Szybcy i spokojni");
 

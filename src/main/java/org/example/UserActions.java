@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class UserActions {
     private int userId;
+    private final DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
     public boolean RegisterUser(String userName, String userPassword) {
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String query = "Select Count(id) from users where " +
                 "userName = '" + userName + "'";
         if (dbHandler.sendQuery(query, "Select",  new String[]{"count(id)"}).get(0).get("count(id)").equals("0")) {
@@ -22,7 +22,6 @@ public class UserActions {
         return false;
     }
     public boolean LoginUser(String userName, String userPassword){
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String[] columns = {"id", "userName", "userPassword"};
         String query = "Select id, userName, userPassword from users where " +
                 "userName = '" + userName + "'";
@@ -44,7 +43,6 @@ public class UserActions {
         }
     }
     public void seeShowtimes(String movieTitle) {
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal","");
         String query = "Select * from Showtimes where movie_title = '"+movieTitle+"';";
         String[] columns = {"date", "time"};
         List<Map<String, String>> response = dbHandler.sendQuery(query, "Select", columns);
@@ -53,15 +51,13 @@ public class UserActions {
         }
     }
     public void seeFreeSeats(String movie_title, String date, String time){
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String query = "Select id from Showtimes where movie_title ='"+movie_title+"' and date ='"+date+"'" +
                 " and time ='"+time+"';";
         String[] columns = {"id"};
         int seats_id = Integer.parseInt(dbHandler.sendQuery(query, "Select", columns).get(0).get("id"));
-        DatabaseHandler dbHandler2 = new DatabaseHandler("mortal", "");
         String nd_query = "Select A, B, C, D, E, F, G, H, I, J from seats where id = '"+seats_id+"';";
         String[] cols = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-        List<Map<String, String>> res = dbHandler2.sendQuery(nd_query, "Select", cols);
+        List<Map<String, String>> res = dbHandler.sendQuery(nd_query, "Select", cols);
         for (Map.Entry<String, String> entry : res.get(0).entrySet()) {
 
             if(entry.getValue().equals("0")){
@@ -70,12 +66,13 @@ public class UserActions {
         }
     }
     public void reserveSeat(int seats_id, String seat) {
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
+        String check_Query = "Select '"+seat+"' from seats where id = '"+seats_id+"';";
+        if(!dbHandler.sendQuery(check_Query, "Select", new String[]{"id"}).get(0).get(seat).equals("0")) return;
+
         String query = "Update seats set "+seat+" = "+userId+" where id = "+seats_id+";";
         dbHandler.sendQuery(query, "Update", null);
     }
     public void seeReservations() {
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
         String query = "Select * from seats JOIN showtimes ON showtimes.id = seats.id where A = "+userId+" or B = "+userId+" or C = "+userId+" or D = "+userId+" or E = "+userId+" or " +
                 "F = "+userId+" or G = "+userId+" or H = "+userId+" or I = "+userId+" or J = "+userId+";";
         System.out.println(query);
@@ -94,12 +91,11 @@ public class UserActions {
 
     }
     public void cancelReservations(String seat, String movie_title, String date, String time){
-        DatabaseHandler dbHandler = new DatabaseHandler("mortal", "");
+
         String query = "update seats set "+seat+" = 0 where id = (select id from showtimes where movie_title = " +
-                "'"+movie_title+"' and date = '"+date+"' and time = '"+time+"' limit 1);";
+                "'"+movie_title+"' and date = '"+date+"' and time = '"+time+"' limit 1) and '"+seat+"='"+userId+"';";
         dbHandler.sendQuery(query, "Update", null);
     }
-
 }
 
 
