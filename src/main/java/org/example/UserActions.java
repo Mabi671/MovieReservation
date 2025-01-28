@@ -88,7 +88,6 @@ public class UserActions {
             }
             System.out.println(re.get("movie_title") +" "+ re.get("date") +" "+ re.get("time") +" "+ seats);
         }
-
     }
     public void cancelReservations(String seat, String movie_title, String date, String time){
 
